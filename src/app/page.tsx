@@ -69,7 +69,7 @@ export default function Home() {
             Encuentra el precio perfecto.
           </h1>
           <p className="text-lg sm:text-xl text-slate-400 max-w-2xl mx-auto">
-            Busca en Amazon, MercadoLibre, eBay y más en un solo lugar. Te avisaremos exactamente cuando el precio baje.
+            Buscamos precios en <span className="text-white font-semibold">Amazon, MercadoLibre, eBay, Temu, Shein, AliExpress</span> y cualquier otra plataforma, todo en un solo lugar. Te avisaremos exactamente cuando el precio baje.
           </p>
         </div>
 
@@ -88,11 +88,15 @@ export default function Home() {
           </form>
         </div>
 
-        <div className="pt-8 flex items-center justify-center gap-6 text-slate-500 text-sm font-medium">
-          <span>Buscando en:</span>
+        <div className="pt-8 flex flex-wrap items-center justify-center gap-4 text-slate-500 text-sm font-medium">
+          <span className="text-slate-400">Consultamos precios en:</span>
           <span className="flex items-center gap-1"><ShoppingBag className="w-4 h-4" /> Amazon</span>
           <span className="flex items-center gap-1"><ShoppingBag className="w-4 h-4" /> MercadoLibre</span>
           <span className="flex items-center gap-1"><ShoppingBag className="w-4 h-4" /> eBay</span>
+          <span className="flex items-center gap-1"><ShoppingBag className="w-4 h-4" /> Temu</span>
+          <span className="flex items-center gap-1"><ShoppingBag className="w-4 h-4" /> Shein</span>
+          <span className="flex items-center gap-1"><ShoppingBag className="w-4 h-4" /> AliExpress</span>
+          <span className="text-slate-600">y cualquier otra plataforma</span>
         </div>
       </main>
 
