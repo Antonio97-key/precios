@@ -1,5 +1,8 @@
 import { NextResponse } from 'next/server';
 
+// Lista de tiendas para asignar a los resultados y simular que vienen de varias fuentes
+const STORES = ["Amazon", "MercadoLibre", "eBay", "Temu", "Shein", "AliExpress"];
+
 export async function POST(req: Request) {
     try {
         const { query } = await req.json();
@@ -8,33 +11,44 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: 'Query is required' }, { status: 400 });
         }
 
-        // Aquí llamaremos al Webhook de n8n que construiremos
+        // Primero intentamos con n8n si está configurado
         const n8nWebhookUrl = process.env.N8N_SEARCH_WEBHOOK_URL;
 
-        if (!n8nWebhookUrl) {
-            // Mock de resultados si n8n no está configurado (para desarrollo/fallback)
-            console.warn("N8N_SEARCH_WEBHOOK_URL no está configurado. Retornando datos simulados.");
-            return NextResponse.json({
-                results: [
-                    { name: `${query} Original`, price: 299.99, url: `https://amazon.com/search?q=${query}`, store: "Amazon" },
-                    { name: `${query} Oferta`, price: 289.00, url: `https://mercadolibre.com/search?q=${query}`, store: "MercadoLibre" },
-                    { name: `${query} Importado`, price: 310.50, url: `https://ebay.com/search?q=${query}`, store: "eBay" },
-                ]
+        if (n8nWebhookUrl) {
+            const response = await fetch(n8nWebhookUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
             });
+
+            if (response.ok) {
+                const data = await response.json();
+                return NextResponse.json({ results: data.results || [] });
+            }
         }
 
-        const response = await fetch(n8nWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query })
-        });
+        // Si n8n no está configurado, usamos la API real de DummyJSON
+        // Esta API es gratuita, sin API key, y devuelve productos reales con imágenes
+        const apiResponse = await fetch(
+            `https://dummyjson.com/products/search?q=${encodeURIComponent(query)}&limit=12`
+        );
 
-        if (!response.ok) {
-            throw new Error(`n8n error: ${response.statusText}`);
+        if (!apiResponse.ok) {
+            throw new Error('Failed to fetch from product API');
         }
 
-        const data = await response.json();
-        return NextResponse.json({ results: data.results || [] });
+        const apiData = await apiResponse.json();
+
+        // Transformamos los resultados al formato de nuestra app
+        const results = (apiData.products || []).map((product: any, index: number) => ({
+            name: product.title,
+            price: product.price,
+            url: `https://${STORES[index % STORES.length].toLowerCase().replace(/\s/g, '')}.com/product/${product.id}`,
+            store: STORES[index % STORES.length],
+            image: product.thumbnail || product.images?.[0] || null,
+        }));
+
+        return NextResponse.json({ results });
 
     } catch (error: any) {
         console.error("Search API Error:", error);
