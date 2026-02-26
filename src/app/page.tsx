@@ -12,6 +12,7 @@ interface ProductType {
   price: number;
   url: string;
   store: string;
+  image?: string;
 }
 
 export default function Home() {
@@ -130,8 +131,12 @@ export default function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((p, idx) => (
               <Card key={idx} className="bg-slate-900/50 border-slate-800 text-white hover:bg-slate-900 transition-colors group">
-                <CardHeader className="p-0 overflow-hidden rounded-t-xl relative aspect-square bg-slate-100 flex items-center justify-center">
-                  <div className="text-slate-400/50 font-medium">[{p.store} Image]</div>
+                <CardHeader className="p-0 overflow-hidden rounded-t-xl relative aspect-square bg-slate-800 flex items-center justify-center">
+                  {p.image ? (
+                    <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                  ) : (
+                    <div className="text-slate-500 text-sm">Sin imagen</div>
+                  )}
                   <div className="absolute top-3 left-3 bg-black/80 backdrop-blur-md px-2 py-1 rounded-md text-xs font-semibold border border-white/10 uppercase">{p.store}</div>
                 </CardHeader>
                 <CardContent className="p-5">
