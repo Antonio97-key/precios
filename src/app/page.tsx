@@ -75,15 +75,17 @@ export default function Home() {
 
         <div className="w-full max-w-2xl relative group mt-8">
           <div className="absolute inset-0 bg-indigo-500/20 rounded-2xl blur-xl group-hover:bg-indigo-500/30 transition-all duration-500"></div>
-          <form className="relative flex items-center bg-slate-900 border border-slate-700/50 rounded-2xl p-2 shadow-2xl focus-within:border-indigo-500/50 transition-colors">
+          <form onSubmit={handleSearch} className="relative flex items-center bg-slate-900 border border-slate-700/50 rounded-2xl p-2 shadow-2xl focus-within:border-indigo-500/50 transition-colors">
             <Search className="w-6 h-6 text-slate-400 ml-3" />
             <Input
               type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Ej. PlayStation 5 Pro, Zapatillas Nike..."
               className="flex-1 bg-transparent border-0 focus-visible:ring-0 focus-visible:ring-offset-0 text-lg px-4 text-white placeholder:text-slate-500 h-14"
             />
-            <Button type="submit" size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl h-12 px-8 font-semibold">
-              Buscar
+            <Button type="submit" disabled={isPending || !searchQuery.trim()} size="lg" className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl h-12 px-8 font-semibold min-w-[120px]">
+              {isPending ? <Loader2 className="w-5 h-5 animate-spin" /> : "Buscar"}
             </Button>
           </form>
         </div>
