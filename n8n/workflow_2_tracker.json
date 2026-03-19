@@ -1,0 +1,119 @@
+{
+    "name": "PriceNode - Cron Tracker",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "hours",
+                            "hoursInterval": 6
+                        }
+                    ]
+                }
+            },
+            "id": "cron-trigger",
+            "name": "Schedule Trigger (cada 6h)",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                100,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "https://iejgnxhqivhqzjftzmmi.supabase.co/rest/v1/rastreos?select=*,productos(*)",
+                "sendHeaders": true,
+                "headerParameters": {
+                    "parameters": [
+                        {
+                            "name": "apikey",
+                            "value": "TU_SUPABASE_ANON_KEY"
+                        },
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer TU_SUPABASE_ANON_KEY"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "http-supabase-get",
+            "name": "Obtener Rastreos Activos",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                350,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Aquí iría la lógica HTTP Request iterativa a cada URL y Cheerio para extraer el CSS\nreturn $input.all();"
+            },
+            "id": "code-scraping",
+            "name": "Lógica de Scraping (Por Implementar)",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                600,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "fromEmail": "alertas@pricenode.com",
+                "toEmail": "={{ $json.usuario_email }}",
+                "subject": "¡Precio rebajado para {{ $json.productos.nombre }}!",
+                "text": "El precio bajó a {{ $json.precio_actual }} y alcanzó tu objetivo de {{ $json.precio_objetivo }}",
+                "options": {}
+            },
+            "id": "email-alert",
+            "name": "Alerta por Email",
+            "type": "n8n-nodes-base.emailSend",
+            "typeVersion": 2.1,
+            "position": [
+                850,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Schedule Trigger (cada 6h)": {
+            "main": [
+                [
+                    {
+                        "node": "Obtener Rastreos Activos",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Obtener Rastreos Activos": {
+            "main": [
+                [
+                    {
+                        "node": "Lógica de Scraping (Por Implementar)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Lógica de Scraping (Por Implementar)": {
+            "main": [
+                [
+                    {
+                        "node": "Alerta por Email",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {}
+}

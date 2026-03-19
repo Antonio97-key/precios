@@ -1,0 +1,107 @@
+{
+    "name": "PriceNode - Buscador Real-Time",
+    "nodes": [
+        {
+            "parameters": {
+                "httpMethod": "POST",
+                "path": "pricenode-search",
+                "responseMode": "lastNode",
+                "options": {}
+            },
+            "id": "webhook-trigger",
+            "name": "Webhook (API Next.js)",
+            "type": "n8n-nodes-base.webhook",
+            "typeVersion": 1,
+            "position": [
+                0,
+                300
+            ],
+            "webhookId": "pricenode-search-1234"
+        },
+        {
+            "parameters": {
+                "url": "=https://api.mercadolibre.com/sites/MLA/search?q={{$json.body.query}}",
+                "options": {}
+            },
+            "id": "mercadolibre-api",
+            "name": "MercadoLibre (API Real)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                250,
+                150
+            ]
+        },
+        {
+            "parameters": {
+                "url": "=https://www.amazon.com/s?k={{$json.body.query}}",
+                "options": {
+                    "responseFormat": "string"
+                }
+            },
+            "id": "amazon-scr",
+            "name": "Amazon (Scraper Placeholder)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                250,
+                450
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "// Logic to aggregate results from different stores\nconst mlProducts = $node[\"MercadoLibre (API Real)\"].json.results || [];\n// ... extraction logic for Amazon using Cheerio ...\n\nconst results = mlProducts.slice(0, 10).map(p => ({\n  name: p.title,\n  price: p.price,\n  url: p.permalink,\n  store: 'MercadoLibre',\n  image: p.thumbnail,\n  verified: true,\n  last_updated: new Date().toISOString()\n}));\n\nreturn [{ json: { results } }];"
+            },
+            "id": "aggregator",
+            "name": "Agregador de Datos",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                600,
+                300
+            ]
+        }
+    ],
+    "connections": {
+        "Webhook (API Next.js)": {
+            "main": [
+                [
+                    {
+                        "node": "MercadoLibre (API Real)",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "Amazon (Scraper Placeholder)",
+                        "type": "main",
+                        "index": 0                     }
+                ]
+            ]
+        },
+        "MercadoLibre (API Real)": {
+            "main": [
+                [
+                    {
+                        "node": "Agregador de Datos",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Amazon (Scraper Placeholder)": {
+            "main": [
+                [
+                    {
+                        "node": "Agregador de Datos",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    }
+}
