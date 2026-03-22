@@ -1,0 +1,11 @@
+[00:00:17.394] Server  LOG     ✓ Ready in 16.4s
+[00:00:20.635] Server  LOG     ○ Compiling / ...
+[00:00:48.094] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:59.529] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:01:22.344] Server  ERROR   ⨯ FirebaseError: Firebase: Error (auth/invalid-api-key).
+[00:01:33.416] Server  ERROR   ⨯ FirebaseError: Firebase: Error (auth/invalid-api-key).
+[00:01:40.578] Browser ERROR   uncaughtError: FirebaseError: Firebase: Error (auth/invalid-api-key).
+[10:17:44.690] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[10:17:52.552] Server  LOG     ○ Compiling /auth ...
+[10:18:00.909] Server  ERROR   ⨯ FirebaseError: Firebase: Error (auth/invalid-api-key).
+[10:18:00.919] Browser ERROR   uncaughtError: FirebaseError: Firebase: Error (auth/invalid-api-key).

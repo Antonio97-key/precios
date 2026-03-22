@@ -1,0 +1,21 @@
+{
+  "node": {
+    "70bae70a855fb57b30342eae58b6af9f43ac63ac31": {
+      "workers": {
+        "app/page": {
+          "moduleId": "[project]/.next-internal/server/app/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "saveTrackingAction",
+          "filename": "src/app/actions.ts"
+        }
+      },
+      "layer": {
+        "app/page": "action-browser"
+      },
+      "filename": "src/app/actions.ts",
+      "exportedName": "saveTrackingAction"
+    }
+  },
+  "edge": {},
+  "encryptionKey": "OUmI/7rim+ZTn8QaSOkr4f0ql5UyClRxWIvUJt0xl9M="
+}
