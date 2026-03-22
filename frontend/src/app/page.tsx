@@ -78,7 +78,7 @@ export default function Home() {
             <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
               <TrendingDown className="w-5 h-5 text-white" />
             </div>
-            <span className="font-bold text-xl tracking-tight hidden sm:block text-slate-100">Monitor Premium</span>
+            <span className="font-bold text-xl tracking-tight hidden sm:block text-slate-100">Monitor de Precios Justos</span>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="ghost" asChild className="text-slate-500 hover:text-indigo-400 text-xs font-bold uppercase tracking-widest hidden md:flex">
@@ -117,7 +117,7 @@ export default function Home() {
             Operabilidad Total Activada
           </div>
           <h1 className="text-6xl sm:text-8xl font-extrabold tracking-tighter bg-gradient-to-br from-white via-white to-slate-500 bg-clip-text text-transparent">
-            Busca y Ahorra.
+            Monitor de Precios Justos
           </h1>
           <p className="text-lg sm:text-2xl text-slate-400 max-w-2xl mx-auto font-medium">
              <span className="text-white">Amazon, AliExpress, eBay, Shein, Temu</span> y más en un solo lugar. 
