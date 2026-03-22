@@ -5,6 +5,7 @@ import { Shield, Mail, Lock, ArrowRight, Github, Chrome } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { auth } from "@/lib/firebase"
+import { errorManager } from "@/lib/errorManager"
 import { 
     signInWithEmailAndPassword, 
     createUserWithEmailAndPassword,
@@ -32,7 +33,8 @@ export default function AuthPage() {
             }
             router.push("/")
         } catch (error: any) {
-            alert(error.message)
+            errorManager.captureError(error, 'MEDIUM', { action: isLogin ? 'login' : 'signup', email });
+            alert("Error de autenticación: " + error.message)
         } finally {
             setLoading(false)
         }
@@ -44,7 +46,8 @@ export default function AuthPage() {
             await signInWithPopup(auth, provider)
             router.push("/")
         } catch (error: any) {
-            alert(error.message)
+            errorManager.captureError(error, 'MEDIUM', { action: 'google_auth' });
+            alert("Error con Google: " + error.message)
         }
     }
 
@@ -69,7 +72,11 @@ export default function AuthPage() {
 
                 <div className="bg-slate-900/50 backdrop-blur-2xl border border-slate-800/60 p-8 rounded-3xl shadow-2xl">
                     <div className="space-y-4 mb-6">
-                        <Button variant="outline" className="w-full border-slate-800 bg-slate-900/30 text-slate-300 gap-3 py-6 hover:bg-slate-800 transition-all">
+                        <Button 
+                            onClick={handleGoogleAuth}
+                            variant="outline" 
+                            className="w-full border-slate-800 bg-slate-900/30 text-slate-300 gap-3 py-6 hover:bg-slate-800 transition-all font-medium"
+                        >
                             <Chrome className="w-5 h-5" /> Continuar con Google
                         </Button>
                         <Button variant="outline" className="w-full border-slate-800 bg-slate-900/30 text-slate-300 gap-3 py-6 hover:bg-slate-800 transition-all">
@@ -86,14 +93,17 @@ export default function AuthPage() {
                         </div>
                     </div>
 
-                    <form className="space-y-4" onSubmit={(e) => e.preventDefault()}>
+                    <form className="space-y-4" onSubmit={handleEmailAuth}>
                         <div className="space-y-1">
                             <div className="relative">
                                 <Mail className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
                                 <Input 
                                     type="email" 
                                     placeholder="tu@email.com" 
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
                                     className="pl-10 py-6 bg-slate-900/50 border-slate-800 focus:ring-indigo-500 focus:border-indigo-500 text-white placeholder:text-slate-600 rounded-xl"
+                                    required
                                 />
                             </div>
                         </div>
@@ -103,13 +113,20 @@ export default function AuthPage() {
                                 <Input 
                                     type="password" 
                                     placeholder="••••••••" 
+                                    value={password}
+                                    onChange={(e) => setPassword(e.target.value)}
                                     className="pl-10 py-6 bg-slate-900/50 border-slate-800 focus:ring-indigo-500 focus:border-indigo-500 text-white placeholder:text-slate-600 rounded-xl"
+                                    required
                                 />
                             </div>
                         </div>
 
-                        <Button className="w-full bg-indigo-600 hover:bg-indigo-500 py-6 rounded-xl font-bold text-lg shadow-lg shadow-indigo-500/20 transition-all gap-2 group">
-                            {isLogin ? "Iniciar Sesión" : "Registrarse"}
+                        <Button 
+                            type="submit"
+                            disabled={loading}
+                            className="w-full bg-indigo-600 hover:bg-indigo-500 py-6 rounded-xl font-bold text-lg shadow-lg shadow-indigo-500/20 transition-all gap-2 group"
+                        >
+                            {loading ? <Loader2 className="animate-spin w-5 h-5" /> : (isLogin ? "Iniciar Sesión" : "Registrarse")}
                             <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                         </Button>
                     </form>

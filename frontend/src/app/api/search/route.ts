@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { productService } from '@/lib/services/productService';
 import { db } from '@/lib/firebase';
+import { errorManager } from '@/lib/errorManager';
 import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
 
 const STORES = ["Amazon", "MercadoLibre", "eBay", "Temu", "Shein", "AliExpress"];
@@ -15,7 +16,8 @@ async function searchProducts(query: string): Promise<any[]> {
             const data = await response.json();
             return data.results || [];
         }
-    } catch (e) {
+    } catch (e: any) {
+        errorManager.captureError(e, 'MEDIUM', { endpoint: 'searchProducts', query });
         console.error("Real search fetch error:", e);
     }
     return [];
@@ -112,6 +114,7 @@ export async function POST(req: Request) {
         });
 
     } catch (error: any) {
+        errorManager.captureError(error, 'HIGH', { endpoint: 'POST /api/search', query });
         console.error("Critical Search API Error:", error);
         return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
     }

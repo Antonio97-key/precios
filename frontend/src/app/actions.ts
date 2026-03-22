@@ -1,6 +1,7 @@
 "use server"
 
 import { db } from "@/lib/firebase";
+import { errorManager } from "@/lib/errorManager";
 import { 
     collection, 
     addDoc, 
@@ -57,6 +58,7 @@ export async function saveTrackingAction(
 
         return { success: true };
     } catch (error: any) {
+        errorManager.captureError(error, 'HIGH', { action: 'saveTrackingAction', email, productUrl: product.url });
         console.error("Error in saveTrackingAction (Firebase):", error);
         return { success: false, error: error.message || "Error desconocido" };
     }

@@ -1,4 +1,5 @@
 import { db } from "../firebase";
+import { errorManager } from "../errorManager";
 import { 
     collection, 
     query, 
@@ -57,7 +58,8 @@ export const productService = {
             }
 
             return { productId, success: true };
-        } catch (error) {
+        } catch (error: any) {
+            errorManager.captureError(error, 'HIGH', { service: 'productService', method: 'upsertProduct', product });
             console.error("Error in upsertProduct (Firebase):", error);
             return { success: false, error };
         }

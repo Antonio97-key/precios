@@ -16,6 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { productService } from "@/lib/services/productService";
+import { auth } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { errorManager } from "@/lib/errorManager";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function AdminDashboard() {
@@ -26,13 +30,24 @@ export default function AdminDashboard() {
         systemHealth: "Óptimo"
     });
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                router.push("/auth");
+            }
+        });
+        return () => unsubscribe();
+    }, [router]);
 
     const loadStats = async () => {
         setLoading(true);
         try {
             const data = await productService.getGlobalStats();
             setStats(prev => ({ ...prev, ...data }));
-        } catch (error) {
+        } catch (error: any) {
+            errorManager.captureError(error, 'HIGH', { component: 'AdminDashboard', action: 'loadStats' });
             console.error("Error loading admin stats:", error);
         } finally {
             setLoading(false);

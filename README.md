@@ -1,6 +1,20 @@
-# 🚀 Monitor de Precios Pro (Firebase Edition)
+# 🚀# PriceNode - Monitoreo de Precios Pro
 
-Una herramienta avanzada para el monitoreo de precios en tiempo real de múltiples marketplaces (**Amazon, MercadoLibre, eBay, y más**), migrada a un backend moderno con **Firebase (Firestore + Auth)** y automatización con **n8n**.
+Sistema avanzado de rastreo de precios en tiempo real con IA.
+
+## 🚀 Preparación para Producción
+
+Este proyecto sigue los estándares del **Sistema de 18 Agentes IA (Antigravity)**.
+
+### ⚙️ Configuración Requerida
+1.  **Firebase**: Configurar un proyecto en [Firebase Console](https://console.firebase.google.com/).
+2.  **Variables de Entorno**: Copiar `.env.example` (o configurar en Vercel) con las llaves de Firebase y el Webhook de n8n.
+3.  **n8n**: Importar los workflows ubicados en la carpeta `/n8n`.
+
+### 🛡️ Cumplimiento de Reglas
+- **Agente 19 (Errores)**: Sistema de logs centralizado en `src/lib/errorManager.ts`.
+- **Agente 10 (Legal)**: Política de privacidad habilitada en `/privacy-policy`.
+- **Operatividad (W.O.W)**: Cero botones muertos y flujos 100% operativos.
 
 ![Dashbord Preview](https://images.unsplash.com/photo-1611974717482-9825d480ee0e?auto=format&fit=crop&q=80&w=2070)
 

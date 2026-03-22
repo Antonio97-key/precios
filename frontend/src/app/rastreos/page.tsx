@@ -4,7 +4,10 @@ import { useEffect, useState } from "react";
 import { TrendingDown, Trash2, ExternalLink, ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { db } from "@/lib/firebase";
+import { db, auth } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
+import { errorManager } from "@/lib/errorManager";
+import { useRouter } from "next/navigation";
 import { 
     collection, 
     query, 
@@ -33,6 +36,16 @@ interface TrackingType {
 export default function RastreosPage() {
     const [rastreos, setRastreos] = useState<TrackingType[]>([]);
     const [loading, setLoading] = useState(true);
+    const router = useRouter();
+
+    useEffect(() => {
+        const authUnsubscribe = onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                router.push("/auth");
+            }
+        });
+        return () => authUnsubscribe();
+    }, [router]);
 
     useEffect(() => {
         setLoading(true);
@@ -56,7 +69,8 @@ export default function RastreosPage() {
 
             setRastreos(trackingsWithProducts.filter(t => t.producto_data));
             setLoading(false);
-        }, (error) => {
+        }, (error: any) => {
+            errorManager.captureError(error, 'HIGH', { component: 'RastreosPage', action: 'subscription' });
             console.error("Firestore subscription error:", error);
             setLoading(false);
         });
@@ -71,7 +85,8 @@ export default function RastreosPage() {
         try {
             await deleteDoc(doc(db, "rastreos", id));
             // El onSnapshot se encargará de actualizar la UI
-        } catch (error) {
+        } catch (error: any) {
+            errorManager.captureError(error, 'MEDIUM', { component: 'RastreosPage', action: 'delete', trackingId: id });
             alert("Error al eliminar el rastro.");
         }
     };
