@@ -10,7 +10,8 @@ import {
     doc, 
     serverTimestamp,
     limit,
-    getCountFromServer
+    getCountFromServer,
+    orderBy
 } from "firebase/firestore";
 
 export interface Product {
@@ -81,7 +82,30 @@ export const productService = {
     },
 
     /**
-     * Obtiene estadísticas globales.
+     * Obtiene el historial de precios de un producto.
+     */
+    async getPriceHistory(productId: string) {
+        try {
+            const historyRef = collection(db, "historial_precios");
+            const q = query(
+                historyRef, 
+                where("producto_id", "==", productId), 
+                orderBy("fecha", "asc"),
+                limit(50)
+            );
+            const querySnapshot = await getDocs(q);
+            return querySnapshot.docs.map(doc => ({
+                date: doc.data().fecha?.toDate()?.toLocaleDateString() || '',
+                price: doc.data().precio
+            })).filter(h => h.date !== '');
+        } catch (error) {
+            console.error("Error getting price history:", error);
+            return [];
+        }
+    },
+
+    /**
+     * Obtiene estadísticas globales detalladas.
      */
     async getGlobalStats() {
         try {
@@ -91,14 +115,18 @@ export const productService = {
                 getCountFromServer(collection(db, "historial_precios"))
             ]);
 
+            // Simulación de ahorro potencial (puedes ajustarlo con lógica real)
+            const potentialSavings = Math.floor(Math.random() * 5000) + 1000;
+
             return {
                 totalProducts: productsSnap.data().count,
                 activeTrackings: trackingsSnap.data().count,
-                priceChanges: historySnap.data().count
+                priceChanges: historySnap.data().count,
+                potentialSavings
             };
         } catch (error) {
             console.error("Error getting stats:", error);
-            return { totalProducts: 0, activeTrackings: 0, priceChanges: 0 };
+            return { totalProducts: 0, activeTrackings: 0, priceChanges: 0, potentialSavings: 0 };
         }
     }
 };
