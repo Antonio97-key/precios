@@ -1,61 +1,36 @@
-# 🚀 Monitor de Precios Justos (Firebase Edition)
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Una herramienta avanzada para el monitoreo de precios en tiempo real de múltiples marketplaces (**Amazon, MercadoLibre, eBay, y más**), migrada a un backend moderno con **Firebase (Firestore + Auth)** y automatización con **n8n**.
+## Getting Started
 
-![Dashbord Preview](https://images.unsplash.com/photo-1611974717482-9825d480ee0e?auto=format&fit=crop&q=80&w=2070)
-
-## ✨ Características Principales
-
-- **🔍 Búsqueda Real**: Integración con la API pública de MercadoLibre para obtener productos reales al instante.
-- **🔥 Backend Firebase**: Migración completa de Supabase a Firestore para una base de datos NoSQL escalable y reactiva.
-- **🔐 Autenticación Universal**: Sistema de Auth integrado con Firebase (Email/Password & Social Login).
-- **📊 Admin Dashboard**: Panel de control avanzado para monitorear estadísticas globales, salud del sistema y analítica de búsquedas.
-- **🎯 Mis Rastreos**: Sección personalizada para que los usuarios gestionen sus productos vigilados y objetivos de precio.
-- **🤖 Automatización n8n**: Workflows listos para scraping y alertas inteligentes.
-
-## 🛠️ Stack Tecnológico
-
-- **Frontend**: Next.js 15+ (App Router, Turbopack)
-- **Styling**: Tailwind CSS 4.0
-- **Database**: Firebase Firestore
-- **Authentication**: Firebase Auth
-- **Automation**: n8n (External Webhooks)
-- **Icons**: Lucide React
-
-## 🚀 Instalación Rápida
-
-### 1. Clonar y Configurar Frontend
+First, run the development server:
 
 ```bash
-cd frontend
-npm install
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Configura tu `.env.local`:
-```env
-NEXT_PUBLIC_FIREBASE_API_KEY=tu_api_key
-NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=tu_auth_domain
-NEXT_PUBLIC_FIREBASE_PROJECT_ID=tu_project_id
-NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=tu_storage_bucket
-NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=tu_sender_id
-NEXT_PUBLIC_FIREBASE_APP_ID=tu_app_id
-N8N_SEARCH_WEBHOOK_URL=tu_webhook_url
-```
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### 2. Importar Workflow n8n
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-Importa el archivo localizado en `/n8n/workflow_1_buscador.json` en tu instancia de n8n para habilitar el scraping avanzado.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## 📂 Estructura del Proyecto
+## Learn More
 
-```text
-/
-├── frontend/           # App principal en Next.js
-├── n8n/                # Workflows de automatización
-├── AGENTES-IA-PLUS/    # Configuración de agentes expertos
-└── skills/             # Habilidades dinámicas del sistema
-```
+To learn more about Next.js, take a look at the following resources:
 
-## 📜 Licencia
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-MIT
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
