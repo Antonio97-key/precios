@@ -1,0 +1,11 @@
+{
+  "name": "monitor-de-precios-justos-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "npm run build --prefix frontend",
+    "dev": "npm run dev --prefix frontend",
+    "start": "npm run start --prefix frontend",
+    "vercel-build": "npm install --prefix frontend && npm run build --prefix frontend"
+  }
+}
